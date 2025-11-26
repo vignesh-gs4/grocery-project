@@ -16,7 +16,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => {
 };
 
 const AddAddress = () => {
-
+  
   const [address, setAddress] = useState({
     firstName: '',
     lastName: '',

@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppContext } from "../../context/AppContext";
 import { assets } from "../../assets/assets";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 const SellerLayout = () => {
 
@@ -28,16 +28,17 @@ const SellerLayout = () => {
           <button onClick={logout} className='border rounded-full text-sm px-4 py-1'>Logout</button>
         </div>
       </div>
-      <div>
-        <div className="md:w-64 w-16 border-r h-[550px] text-base border-gray-300 pt-4 flex flex-col transition-all duration-300">
+      <div className="flex">
+        <div className="md:w-64 w-16 border-r h-[95vh] text-base border-gray-300 pt-4 flex flex-col">
           {sidebarLinks.map((item) => {
-            console.log(item.path)
-            console.log(item.path==="/seller");
             return (<NavLink to={item.path} key={item.name} end
-              className={({ isActive }) => `flex items-center py-3 px-4 gap-3 
+              className={({ isActive }) => {
+                // console.log(item.path, " : ", isActive);
+                return `flex items-center py-3 px-4 gap-3 
                             ${isActive ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary"
-                  : "hover:bg-gray-100/90 border-white text-gray-700"
-                }`
+                    : "hover:bg-gray-100/90 border-white text-gray-700"
+                  } `
+              }
               }
             >
               <img src={item.icon} alt="" className="s-8" />
@@ -45,6 +46,7 @@ const SellerLayout = () => {
             </NavLink>)
           })}
         </div>
+        <Outlet />
       </div>
     </>
   );
