@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { assets, categories } from '../../assets/assets';
+import { useAppContext } from '../../context/AppContext';
+import toast from "react-hot-toast";
 
 const AddProduct = () => {
 
@@ -12,8 +14,44 @@ const AddProduct = () => {
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
 
+  const { axios } = useAppContext();
+
   const onSubmitHandler = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+
+      const productData = {
+        name,
+        description: description.split('/n'),
+        category,
+        price,
+        offerPrice
+      };
+
+      const formData = new FormData();
+      formData.append('productData', JSON.stringify(productData));
+
+      for (let i = 0; i < files.length; i++) {
+        formData.append('images', files[i]);
+      }
+
+      const { data } = await axios.post("http://localhost:4000/api/product/add", formData);
+
+      if (data.success) {
+        toast.success(data.message);
+        setName("");
+        setDescription("");
+        setCategory("");
+        setPrice("");
+        setOfferPrice("");
+        setFiles("");
+      } else {
+        toast.error(data.message);
+      }
+
+    } catch (err) {
+      toast.error(err.message);
+    }
   }
 
   return (
@@ -24,14 +62,14 @@ const AddProduct = () => {
           <div className="flex flex-wrap items-center gap-3 mt-2">
             {Array(4).fill('').map((_, index) => (
               <label key={index} htmlFor={`image${index}`}>
-                
+
                 <input
                   onChange={e => {
                     const updatedFiles = [...files];
                     updatedFiles[index] = e.target.files[0];
                     setFiles(updatedFiles);
                   }}
-                accept="image/*" type="file" id={`image${index}`} hidden />
+                  accept="image/*" type="file" id={`image${index}`} hidden />
 
                 <img className="max-w-24 cursor-pointer" src={files[index] ?
                   URL.createObjectURL(files[index]) : assets.upload_area
@@ -60,7 +98,7 @@ const AddProduct = () => {
         <div className="flex items-center gap-5 flex-wrap">
           <div className="flex-1 flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="product-price">Product Price</label>
-            <input onChange={e => setPrice(e.target.value)} value={price} id="product-price" type="text"className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
+            <input onChange={e => setPrice(e.target.value)} value={price} id="product-price" type="text" className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
           </div>
           <div className="flex-1 flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="offer-price">Offer Price</label>
