@@ -1,18 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import { dummyProducts } from '../assets/assets';
 import toast from 'react-hot-toast';
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URI;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+
+console.log("base url : ",import.meta.env.VITE_BACKEND_URL);
 
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-
-  // console.log("import.meta : ", import.meta);
-  // console.log("import.meta.env : ", import.meta.env);
 
   const currency = "$";
   // console.log("currency : ", currency);
@@ -21,7 +20,7 @@ export const AppContextProvider = ({ children }) => {
   const [user, setUser] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
-  const [products, setProducts] = useState(dummyProducts);
+  const [products, setProducts] = useState([]);
   
   const [cartItems, setCartItems] = useState({});
   const [searchQuery, setSearchQuery] = useState({})
@@ -29,22 +28,34 @@ export const AppContextProvider = ({ children }) => {
   //Fetch Seller States
   const fetchSeller = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/seller/is-auth");
-      console.log(data);
+      const { data } = await axios.get("/api/seller/is-auth");
+      // console.log(data);
       if(data.success) {
         setIsSeller(true);
       } else {
         setIsSeller(false);
       }
     } catch(err) {
+      console.log(err.message);
       setIsSeller(false);
     }
   };
 
   //fetch all products
-  const fetchProducts = () => {
-    // console.log("dummyProducts : ", dummyProducts);
-    setProducts(dummyProducts);
+  const fetchProducts = async () => {
+    try {
+      const { data } = await axios.get('/api/product/list');
+
+      if(data.success) {
+        setProducts(data.products)
+      } else {
+        toast.error(data.message);
+      }
+
+    } catch(err) {
+      toast.error(data.message);
+        console.log("error fetching product : ", err.message);
+    }
   }
 
   // fetchProducts();
@@ -125,7 +136,7 @@ export const AppContextProvider = ({ children }) => {
     products, currency,
     addToCart, updateCartItem, removeFromCart,
     cartItems, searchQuery, setSearchQuery,
-    getCartAmount, getCartCount, axios
+    getCartAmount, getCartCount, axios, fetchProducts
   };
 
 

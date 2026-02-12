@@ -10,9 +10,7 @@ const SellerLogin = () => {
   const onSubmitHandler = async (event) => {
     try {
       event.preventDefault();
-      console.log("email : ", email);
-      console.log("password: ", password);
-      const { data } = await axios.post("http://localhost:4000/api/seller/login", {email, password});
+      const { data } = await axios.post("/api/seller/login", {email, password});
 
       if(data.success) {
         setIsSeller(true);

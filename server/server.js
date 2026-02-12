@@ -5,6 +5,7 @@ import "dotenv/config"
 import connectDB from "./config/db.js";
 import userRouter from "./routes/userRoute.js";
 import sellerRouter from "./routes/sellerRoute.js";
+import connectCloudinary from "./config/cloudinary.js";
 import productRouter from "./routes/productRoute.js";
 import cartRouter from "./routes/cartRouter.js";
 import addressRouter from "./routes/addressRoute.js";
@@ -14,6 +15,7 @@ const app = express();
 const port = process.env.PORT | 4000;
 
 await connectDB();
+await connectCloudinary();
 const allowOrigins = ['http://localhost:5173'];
 
 //Middleware configuration

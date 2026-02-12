@@ -1,10 +1,12 @@
 import Product from "../models/Product.js";
-import cloudinary from "../config/cloudinary.js";
+import { v2 as cloudinary } from "cloudinary";
 
 //Add Product : /api/product/add
 export const addProduct = async (req, res) => {
     try {
         let productData = JSON.parse(req.body.productData);
+
+        // console.log(req.files);
 
         const images = req.files;
 
@@ -21,7 +23,7 @@ export const addProduct = async (req, res) => {
 
         res.json({ success: true, message: "Product Added" });
     } catch (err) {
-        console.log("error occurring adding product : ", err.message);
+        console.log("error occurring adding product : ", err);
         res.json({ success: false, message: err.message });
     }
 };

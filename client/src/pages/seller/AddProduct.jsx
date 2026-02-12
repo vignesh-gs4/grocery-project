@@ -35,7 +35,7 @@ const AddProduct = () => {
         formData.append('images', files[i]);
       }
 
-      const { data } = await axios.post("http://localhost:4000/api/product/add", formData);
+      const { data } = await axios.post("/api/product/add", formData);
 
       if (data.success) {
         toast.success(data.message);
@@ -44,7 +44,7 @@ const AddProduct = () => {
         setCategory("");
         setPrice("");
         setOfferPrice("");
-        setFiles("");
+        setFiles([]);
       } else {
         toast.error(data.message);
       }

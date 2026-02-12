@@ -19,7 +19,7 @@ const ProductDetails = () => {
       productsCopy = productsCopy.filter(item => product.category === item.category);
       setRelatedProducts(productsCopy.slice(0, 5));
     }
-  }, [products]);
+  }, [products, product.category]);
 
   useEffect(() => {
     setThumbnail(product?.image[0] ? product.image[0] : null);
@@ -54,7 +54,7 @@ const ProductDetails = () => {
 
           <div className="flex items-center gap-0.5 mt-1">
             {Array(5).fill('').map((_, i) => (
-              <img src={i < 4 ? assets.star_icon : assets.star_dull_icon}
+              <img key={i} src={i < 4 ? assets.star_icon : assets.star_dull_icon}
               className='md:w-4 w-3.5'/>
             ))}
             <p className="text-base ml-2">(4)</p>
