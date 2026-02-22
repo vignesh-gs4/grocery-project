@@ -5,7 +5,7 @@ import ProductCard from '../components/ProductCard';
 const AllProducts = () => {
   const { products, searchQuery } = useAppContext();
   const [filteredProducts, setFilteredProducts] = useState([]);
-
+  console.log("products : ", products);
   useEffect(() => {
     if(searchQuery.length > 0) {
       setFilteredProducts(products.filter(
@@ -25,7 +25,7 @@ const AllProducts = () => {
 
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3
       md:gap-6 lg:grid-cols-5 mt-6'>
-        {filteredProducts.filter((product) => product.inStock).map((product, index) => (
+        {filteredProducts.filter((product) => product.isStock).map((product, index) => (
           <ProductCard key={index} product={product} />
         ) )}
       </div>
