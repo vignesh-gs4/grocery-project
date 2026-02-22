@@ -10,8 +10,10 @@ const ProductDetails = () => {
   const { id } = useParams();
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
-
+  
   const product = products.find((item) => item._id === id);
+  console.log("products : ", products);
+  console.log("product : ", product);
 
   useEffect(() => {
     if (products.length > 0) {
@@ -20,6 +22,7 @@ const ProductDetails = () => {
       setRelatedProducts(productsCopy.slice(0, 5));
     }
   }, [products, product.category]);
+
 
   useEffect(() => {
     setThumbnail(product?.image[0] ? product.image[0] : null);
