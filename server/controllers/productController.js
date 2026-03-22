@@ -1,5 +1,5 @@
 import Product from "../models/Product.js";
-import { v2 as cloudinary } from "cloudinary";
+import uploadStream from "../utils/fileUploader.js"
 
 //Add Product : /api/product/add
 export const addProduct = async (req, res) => {
@@ -8,16 +8,11 @@ export const addProduct = async (req, res) => {
 
         // console.log(req.files);
 
-        const images = req.files;
+        const imagesPromises = req.files.map((file) => {
+            return uploadStream(file.buffer);
+        });
 
-        let imagesUrl = await Promise.all(
-            images.map(async (item) => {
-                let result = await cloudinary.uploader.upload(item.path,
-                    { resource_type: 'image' });
-
-                return result.secure_url;
-            })
-        )
+        let imagesUrl = await Promise.all(imagesPromises);
 
         await Product.create({ ...productData, image: imagesUrl });
 
@@ -58,7 +53,7 @@ export const changeStock = async (req, res) => {
         const { id, isStock } = req.body;
         console.log("inStock : ", isStock);
         await Product.findByIdAndUpdate(id, { isStock });
-        res.json({ success: true, message: 'Stock Updated'});
+        res.json({ success: true, message: 'Stock Updated' });
     } catch (err) {
         console.log("error occurring  product inStock : ", err.message);
         res.json({ success: false, message: err.message });
