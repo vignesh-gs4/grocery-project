@@ -7,10 +7,16 @@ const AllProducts = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   console.log("products : ", products);
   useEffect(() => {
-    if(searchQuery.length > 0) {
-      setFilteredProducts(products.filter(
-        products => products.name.toLowerCase().includes(searchQuery.toLowerCase())
-      ))
+    if (searchQuery.length > 0) {
+      setFilteredProducts(() => {
+        const filteredProducts = products.filter(
+          products => products.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        if (filteredProducts.length === 0) {
+          return null;
+        }
+        return filteredProducts;
+      })
     } else {
       setFilteredProducts(products);
     }
@@ -23,12 +29,17 @@ const AllProducts = () => {
         <div className='w-16 h-0.5 bg-primary rounded-full'></div>
       </div>
 
-      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3
+      {!filteredProducts ? (
+        <p className='text-2xl text-center my-10'>No Product Found</p>
+      ) : (
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3
       md:gap-6 lg:grid-cols-5 mt-6'>
-        {filteredProducts.filter((product) => product.isStock).map((product, index) => (
-          <ProductCard key={index} product={product} />
-        ) )}
-      </div>
+          {filteredProducts.filter(
+            (product) => product.isStock)
+            .map((product, index) => (
+              <ProductCard key={index} product={product} />))}
+        </div>
+      )}
     </div>
   )
 }

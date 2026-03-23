@@ -10,12 +10,13 @@ const Orders = () => {
   const fetchOrders = async () => {
     try {
       const { data } = await axios.get("/api/order/seller");
-      if(data.success) {
+      console.log("order data : ", data);
+      if (data.success) {
         setOrders(data.orders);
       } else {
         toast.error(data.message);
       }
-    } catch(err) {
+    } catch (err) {
       console.log("error while fetching data : ", err.message);
       toast.error(err.message);
     }
@@ -33,14 +34,16 @@ const Orders = () => {
           <div key={index} className="flex flex-col md:items-center md:flex-row gap-5 justify-between p-5 max-w-4xl rounded-md border border-gray-300">
             <div className="flex gap-5 max-w-80">
               <img className="w-12 h-12 object-cover" src={assets.box_icon} alt="boxIcon" />
-              <div>
-                {order.items.map((item, index) => (
-                  <div key={index} className="flex flex-col">
+              <div>{console.log(order)}
+                {order.items.map((item, index) => {
+                  console.log(item)
+                  
+                  return <div key={index} className="flex flex-col">
                     <p className="font-medium">
-                      {item.product.name} <span className="text-primary">x {item.quantity}</span>
+                      {item.product?.name} <span className="text-primary">x {item.quantity}</span>
                     </p>
                   </div>
-                ))}
+                })}
               </div>
             </div>
 

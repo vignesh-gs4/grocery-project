@@ -32,7 +32,7 @@ const Cart = () => {
         if(data.addresses.length > 0) {
           setSelectedAddress(data.addresses[0]);
         } else {
-          toast.error(data.message);
+          toast.error(data.message || "Please give the address");
         }
       }
     } catch(err) {

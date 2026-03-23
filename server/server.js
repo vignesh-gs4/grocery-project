@@ -24,6 +24,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({origin: allowOrigins, credentials: true}));
 
+app.use((req, res, next) => {
+  console.log("req.url : ", req.url);
+  next();
+});
+
 app.get("/", (req, res) => {
   console.log(`--------${req.url}---------`)
   res.send("API is Working");
